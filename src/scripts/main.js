@@ -1,12 +1,15 @@
 function main() {
-
-    const baseUrl = "https://api.themoviedb.org/3/movie";
+    const container = document.querySelector(".container");
+    const listPopularElement = document.querySelector("#popularSlide");
+    const listNowElement = document.querySelector("#nowplayingBar");
+    const listUpcomingElement = document.querySelector("#upcomingBar");
+    const baseUrl = "https://api.themoviedb.org/3";
     const baseUrlImage = "https://image.tmdb.org/t/p/original";
     const API_KEY = "ce3747f9814de0e3fc3292c9ef36fcdb";
 
     const getPopular = async () => {
         try{
-            const url = ''.concat(baseUrl, `/popular`, `?api_key=${API_KEY}`);
+            const url = ''.concat(baseUrl, `/movie/popular?`, `api_key=${API_KEY}`);
             const response = await fetch(`${url}`);
             const responseJson = await response.json();
             if(responseJson.error){
@@ -19,30 +22,15 @@ function main() {
         }
     };
 
-    const getNowplaying = async () => {
+    const getMovie = async (query, elementItem, title) => {
         try{
-            const url = ''.concat(baseUrl, `/now_playing`, `?api_key=${API_KEY}`);
+            const url = ''.concat(baseUrl, `${query}?`, `api_key=${API_KEY}`);
             const response = await fetch(`${url}`);
             const responseJson = await response.json();
             if(responseJson.error){
                 showResponseMessage(responseJson.message);
             }else{
-                renderNowplaying(responseJson.results);
-            }
-        } catch(error){
-            showResponseMessage(error);
-        }
-    };
-
-    const getUpcoming = async () => {
-        try{
-            const url = ''.concat(baseUrl, `/upcoming`, `?api_key=${API_KEY}`);
-            const response = await fetch(`${url}`);
-            const responseJson = await response.json();
-            if(responseJson.error){
-                showResponseMessage(responseJson.message);
-            }else{
-                renderUpcoming(responseJson.results);
+                renderMovie(responseJson.results, elementItem, title);
             }
         } catch(error){
             showResponseMessage(error);
@@ -50,7 +38,6 @@ function main() {
     };
 
     const renderPopular = (results) => {
-        const listPopularElement = document.querySelector("#popularSlide");
         if (listPopularElement != null){
             listPopularElement.classList.add('carousel', 'slide', 'carousel-fade');
             listPopularElement.setAttribute("data-ride","carousel");
@@ -104,19 +91,18 @@ function main() {
 
     };
 
-    const renderNowplaying = (results) => {
-        const listNowElement = document.querySelector("#nowplayingBar");
-        if (listNowElement != null){
-            listNowElement.classList.add('item-bar');
-            listNowElement.innerHTML += `
+    const renderMovie = (results, parentElement, title) => {
+        if (parentElement != null){
+            parentElement.classList.add('item-bar');
+            parentElement.innerHTML += `
                 <div class="title-item">
-                    <p>Now Playing</p>
+                    <p>${title}</p>
                 </div>`;
 
-            const listNow = document.createElement("div");
-            listNow.classList.add('row');
+            const list = document.createElement("div");
+            list.classList.add('row');
             for (let i=0;i<4;i++){
-                listNow.innerHTML += `
+                list.innerHTML += `
                 <div class="item-movie col-lg-3 col-md-6 col-sm-12">
                     <div class="item-component">
                         <img src="${baseUrlImage}${results[i].poster_path}" class="d-block w-100" alt="poster">
@@ -125,32 +111,7 @@ function main() {
                 </div>`;
             }
 
-            listNowElement.appendChild(listNow);
-        }
-    };
-
-    const renderUpcoming = (results) => {
-        const listNowElement = document.querySelector("#upcomingBar");
-        if (listNowElement != null){
-            listNowElement.classList.add('item-bar');
-            listNowElement.innerHTML += `
-                <div class="title-item">
-                    <p>Now Playing</p>
-                </div>`;
-                
-            const listNow = document.createElement("div");
-            listNow.classList.add('row');
-            for (let i=0;i<4;i++){
-                listNow.innerHTML += `
-                <div class="item-movie col-lg-3 col-md-6 col-sm-12">
-                    <div class="item-component">
-                        <img src="${baseUrlImage}${results[i].poster_path}" class="d-block w-100" alt="poster">
-                        <h4>${results[i].title}</h4>
-                    </div>
-                </div>`;
-            }
-
-            listNowElement.appendChild(listNow);
+            parentElement.appendChild(list);
         }
     };
 
@@ -160,34 +121,22 @@ function main() {
 
     document.addEventListener("DOMContentLoaded", () => {
 
-        // const inputBookId = document.querySelector("#inputBookId");
-        // const inputBookTitle = document.querySelector("#inputBookTitle");
-        // const inputBookAuthor = document.querySelector("#inputBookAuthor");
-        // const buttonSave = document.querySelector("#buttonSave");
-        // const buttonUpdate = document.querySelector("#buttonUpdate");
+        const inputSearch = document.querySelector("#inputSearch");
+        const btnSearch = document.querySelector("#searchButtonElement");
+        btnSearch.addEventListener("click", function (){
+            if(container.children.length != 0){
+                container.removeChild(listPopularElement);
+                container.removeChild(listNowElement);
+                container.removeChild(listUpcomingElement);
+            }
 
-        // buttonSave.addEventListener("click", function () {
-        //     const book = {
-        //         id: Number.parseInt(inputBookId.value),
-        //         title: inputBookTitle.value,
-        //         author: inputBookAuthor.value
-        //     };
-        //     insertBook(book)
-        // });
-
-        // buttonUpdate.addEventListener("click", function () {
-        //     const book = {
-        //         id: Number.parseInt(inputBookId.value),
-        //         title: inputBookTitle.value,
-        //         author: inputBookAuthor.value
-        //     };
-
-        //     updateBook(book)
-        // });
+            const input = inputSearch.value;
+            console.log(input);
+        });
 
         getPopular();
-        getNowplaying();
-        getUpcoming();
+        getMovie('/movie/now_playing', listNowElement, 'Now Playing');
+        getMovie('/movie/upcoming', listUpcomingElement, 'Upcoming');
     });
 }
 
