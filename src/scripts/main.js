@@ -1,13 +1,10 @@
 function main() {
-    const container = document.querySelector(".container");
-    const listPopularElement = document.querySelector("#popularSlide");
-    const listNowElement = document.querySelector("#nowplayingBar");
-    const listUpcomingElement = document.querySelector("#upcomingBar");
+
     const baseUrl = "https://api.themoviedb.org/3";
     const baseUrlImage = "https://image.tmdb.org/t/p/original";
     const API_KEY = "ce3747f9814de0e3fc3292c9ef36fcdb";
 
-    const getPopular = async () => {
+    const getPopular = async (elementItem) => {
         try{
             const url = ''.concat(baseUrl, `/movie/popular?`, `api_key=${API_KEY}`);
             const response = await fetch(`${url}`);
@@ -15,7 +12,7 @@ function main() {
             if(responseJson.error){
                 showResponseMessage(responseJson.message);
             }else{
-                renderPopular(responseJson.results);
+                renderPopular(responseJson.results, elementItem);
             }
         } catch(error){
             showResponseMessage(error);
@@ -24,7 +21,7 @@ function main() {
 
     const getMovie = async (query, elementItem, title) => {
         try{
-            const url = ''.concat(baseUrl, `${query}?`, `api_key=${API_KEY}`);
+            const url = ''.concat(baseUrl, `${query}`, `api_key=${API_KEY}`);
             const response = await fetch(`${url}`);
             const responseJson = await response.json();
             if(responseJson.error){
@@ -37,7 +34,7 @@ function main() {
         }
     };
 
-    const renderPopular = (results) => {
+    const renderPopular = (results, listPopularElement) => {
         if (listPopularElement != null){
             listPopularElement.classList.add('carousel', 'slide', 'carousel-fade');
             listPopularElement.setAttribute("data-ride","carousel");
@@ -120,23 +117,34 @@ function main() {
     };
 
     document.addEventListener("DOMContentLoaded", () => {
+        const listPopularElement = document.querySelector("#popularSlide");
+        const listNowElement = document.querySelector("#nowplayingBar");
+        const listUpcomingElement = document.querySelector("#upcomingBar");
+        const searchElement = document.querySelector("#searchElement");
 
         const inputSearch = document.querySelector("#inputSearch");
         const btnSearch = document.querySelector("#searchButtonElement");
-        btnSearch.addEventListener("click", function (){
-            if(container.children.length != 0){
-                container.removeChild(listPopularElement);
-                container.removeChild(listNowElement);
-                container.removeChild(listUpcomingElement);
-            }
 
+        btnSearch.addEventListener("click", function (){
             const input = inputSearch.value;
-            console.log(input);
+
+            listPopularElement.style.display = "none";
+            listNowElement.style.display = "none";
+            listUpcomingElement.style.display = "none";
+            searchElement.style.display = "block";
+            searchElement.innerHTML ="";
+
+            if (input != ""){
+                getMovie(`/search/movie?query=${input}&`, searchElement, `Search ${input}`);
+            }else{
+                getMovie(`/search/movie?query=%20&`, searchElement, `Search ${input}`);    
+            }
+            
         });
 
-        getPopular();
-        getMovie('/movie/now_playing', listNowElement, 'Now Playing');
-        getMovie('/movie/upcoming', listUpcomingElement, 'Upcoming');
+        getPopular(listPopularElement);
+        getMovie('/movie/now_playing?', listNowElement, 'Now Playing');
+        getMovie('/movie/upcoming?', listUpcomingElement, 'Upcoming');
     });
 }
 

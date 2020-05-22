@@ -16,18 +16,22 @@
 }
 
 .title-item > p{
+    position: relative;
     padding: 8px 16px 8px 16px;
     color: #FFFFFF;
     background: #E43F5A;
     font-family: Roboto;
     font-style: normal;
+    text-align: center;
     font-weight: bold;
+    max-width: 200px;
     font-size: 18px;
-    width: 150px;
     line-height: 21px;
-    display: flex;
-    align-items: center;
     border-radius: 20px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-movie{
