@@ -1,0 +1,14 @@
+.app-bar{
+    background: #1F4068;
+}
+
+.navbar {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.title-bar{
+    color: white;
+    font-family: Roboto;
+}
