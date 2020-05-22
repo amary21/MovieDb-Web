@@ -27,7 +27,7 @@ function main() {
             if(responseJson.error){
                 showResponseMessage(responseJson.message);
             }else{
-                console.log(responseJson.results);
+                renderNowplaying(responseJson.results);
             }
         } catch(error){
             showResponseMessage(error);
@@ -42,7 +42,7 @@ function main() {
             if(responseJson.error){
                 showResponseMessage(responseJson.message);
             }else{
-                console.log(responseJson.results);
+                renderUpcoming(responseJson.results);
             }
         } catch(error){
             showResponseMessage(error);
@@ -102,6 +102,56 @@ function main() {
                 </a>`;
         }
 
+    };
+
+    const renderNowplaying = (results) => {
+        const listNowElement = document.querySelector("#nowplayingBar");
+        if (listNowElement != null){
+            listNowElement.classList.add('item-bar');
+            listNowElement.innerHTML += `
+                <div class="title-item">
+                    <p>Now Playing</p>
+                </div>`;
+
+            const listNow = document.createElement("div");
+            listNow.classList.add('row');
+            for (let i=0;i<4;i++){
+                listNow.innerHTML += `
+                <div class="item-movie col-lg-3 col-md-6 col-sm-12">
+                    <div class="item-component">
+                        <img src="${baseUrlImage}${results[i].poster_path}" class="d-block w-100" alt="poster">
+                        <h4>${results[i].title}</h4>
+                    </div>
+                </div>`;
+            }
+
+            listNowElement.appendChild(listNow);
+        }
+    };
+
+    const renderUpcoming = (results) => {
+        const listNowElement = document.querySelector("#upcomingBar");
+        if (listNowElement != null){
+            listNowElement.classList.add('item-bar');
+            listNowElement.innerHTML += `
+                <div class="title-item">
+                    <p>Now Playing</p>
+                </div>`;
+                
+            const listNow = document.createElement("div");
+            listNow.classList.add('row');
+            for (let i=0;i<4;i++){
+                listNow.innerHTML += `
+                <div class="item-movie col-lg-3 col-md-6 col-sm-12">
+                    <div class="item-component">
+                        <img src="${baseUrlImage}${results[i].poster_path}" class="d-block w-100" alt="poster">
+                        <h4>${results[i].title}</h4>
+                    </div>
+                </div>`;
+            }
+
+            listNowElement.appendChild(listNow);
+        }
     };
 
     const showResponseMessage = (message = "Check your internet connection") => {
