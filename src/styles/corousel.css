@@ -69,6 +69,8 @@
 
 .slide-det-item{
     position: static;
+    color: #FFFFFF;
+    font-family: Roboto;
     font-size: 14px;
     flex: none;
     align-self: flex-start;
