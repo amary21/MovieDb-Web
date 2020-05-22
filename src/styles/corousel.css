@@ -11,6 +11,13 @@
   overflow: hidden;
 }
 
+.carousel-indicators li {
+    width: 15px;
+    height: 15px;
+    margin: 8px;
+    border-radius: 100%;
+}
+
 .carousel-item > .slide-item{
     flex-direction: column;
     padding: 24px 16px;

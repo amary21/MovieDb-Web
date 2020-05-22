@@ -38,7 +38,11 @@
     position: static;
 }
 
-.item-movie > .item-component{
+.item-movie > a.button{
+    text-decoration: none;
+}
+
+.item-movie > a > .item-component{
     border-radius: 10px;
     margin-bottom: 16px;
     padding-bottom: 4px;
@@ -50,7 +54,7 @@
     
 }
 
-.item-component > h4{
+.item-component > h5{
     font-family: Roboto;
     text-align: center;
     color: #FFFFFF;

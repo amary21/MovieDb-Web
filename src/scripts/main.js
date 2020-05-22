@@ -45,30 +45,33 @@ function main() {
             const popularItem = document.createElement("div");
             popularItem.classList.add('carousel-inner');
     
-            for (let i=0; i < 5;i++){
+            for (let i=0; i < results.length;i++){
                 const item = document.createElement("div");
+                if(i >= 5){
+                    break;
+                }else {
+                    if (i == 0){
+                        pageNumber.innerHTML +=`
+                            <li data-target="#popularSlide" data-slide-to=${i} class="active"></li>`;
+                        item.classList.add('carousel-item', 'active');
+                    }else{
+                        pageNumber.innerHTML +=`
+                            <li data-target="#popularSlide" data-slide-to=${i}></li>`;
+                        item.classList.add('carousel-item');
+                    }
 
-                if (i == 0){
-                    pageNumber.innerHTML +=`
-                        <li data-target="#popularSlide" data-slide-to=${i} class="active"></li>`;
-                    item.classList.add('carousel-item', 'active');
-                }else{
-                    pageNumber.innerHTML +=`
-                        <li data-target="#popularSlide" data-slide-to=${i}></li>`;
-                    item.classList.add('carousel-item');
+                    item.innerHTML += `
+                        <img src="${baseUrlImage}${results[i].backdrop_path}" class="d-block w-100" alt="cover">
+                        <div class="slide-item">
+                            <h4 class="slide-title-item">${results[i].title}</h4>
+                            <div class="slide-des-item">
+                                <p>${results[i].overview}</p>
+                            </div>
+                            <p class="slide-det-item"><b>Release Date</b>  ${results[i].release_date}</p>
+                            <p class="slide-det-item"><b>Rate</b>  ${results[i].vote_average}</p>
+                            <p class="slide-det-item"><b>Popular</b>  ${results[i].popularity}</p>  
+                        </div>`;
                 }
-
-                item.innerHTML += `
-                    <img src="${baseUrlImage}${results[i].backdrop_path}" class="d-block w-100" alt="cover">
-                    <div class="slide-item">
-                        <h4 class="slide-title-item">${results[i].title}</h4>
-                        <div class="slide-des-item">
-                            <p>${results[i].overview}</p>
-                        </div>
-                        <p class="slide-det-item"><b>Release Date</b>  ${results[i].release_date}</p>
-                        <p class="slide-det-item"><b>Rate</b>  ${results[i].vote_average}</p>
-                        <p class="slide-det-item"><b>Popular</b>  ${results[i].popularity}</p>  
-                    </div>`;
 
                 popularItem.appendChild(item);
             }
@@ -98,18 +101,40 @@ function main() {
 
             const list = document.createElement("div");
             list.classList.add('row');
-            for (let i=0;i<4;i++){
-                list.innerHTML += `
-                <div class="item-movie col-lg-3 col-md-6 col-sm-12">
-                    <div class="item-component">
-                        <img src="${baseUrlImage}${results[i].poster_path}" class="d-block w-100" alt="poster">
-                        <h4>${results[i].title}</h4>
-                    </div>
-                </div>`;
+            for(let i = 0;i < results.length;i++){
+                var imageHolder = "";
+                if(i >= 6){
+                    break;
+                }else {
+                    if (results[i].poster_path != null){
+                        imageHolder = baseUrlImage + results[i].poster_path;
+                    }else{
+                        imageHolder = "https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png";
+                    }
+
+                    list.innerHTML += `
+                    <div class="item-movie col-lg-2 col-md-4 col-sm-6" id="${results[i].id}">
+                        <a href="#" class="button">
+                            <div class="item-component">
+                                <img src="${imageHolder}" class="d-block w-100 img-fluid" alt="poster">
+                                <h5>${results[i].title}</h5>
+                            </div>
+                        </a>
+                    </div>`;
+                }
+
+                parentElement.appendChild(list);
             }
 
-            parentElement.appendChild(list);
+            const itemMovie = document.querySelectorAll(".item-movie");
+            itemMovie.forEach(item => {
+                item.addEventListener("click", event => {
+                    console.log(event.currentTarget.id);
+                });
+            });
         }
+
+
     };
 
     const showResponseMessage = (message = "Check your internet connection") => {
