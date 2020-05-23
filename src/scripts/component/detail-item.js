@@ -8,6 +8,7 @@ class DetailItem extends HTMLElement{
     }
 
     render() {
+        this.innerHTML ="";
         let nGenres = [];
         let nCompanies = [];
         let nCountries = [];

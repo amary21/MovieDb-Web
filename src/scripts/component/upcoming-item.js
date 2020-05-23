@@ -116,14 +116,14 @@ class UpcomingItem extends HTMLElement{
                 this.appendChild(list);
             }  
             
-            const listPopularElement = document.querySelector("#popularSlide");
+            const carouselItem = document.querySelector("carousel-list");
             const nowItem = document.querySelector("nowplaying-item");
             const detailItem = document.querySelector("detail-item");
             const itemMovie = document.querySelectorAll(".item-component");
             itemMovie.forEach(item => {
                 item.addEventListener("click", event => {
                     this.style.display = "none";
-                    listPopularElement.style.display = "none";
+                    carouselItem.style.display = "none";
                     nowItem.style.display = "none";
                     detailItem.style.display = "block";
                     

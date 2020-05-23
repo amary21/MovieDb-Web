@@ -1,4 +1,5 @@
 import baseUrl from '../data/baseurl.js';
+import Detail from '../data/detail-data.js';
 
 class SearchItem extends HTMLElement{
 
@@ -113,7 +114,27 @@ class SearchItem extends HTMLElement{
                 }
 
                 this.appendChild(list);
-            }    
+        }
+            
+        const carouselItem = document.querySelector("carousel-list");
+        const nowItem = document.querySelector("nowplaying-item");
+        const detailItem = document.querySelector("detail-item");
+        const upcomingItem = document.querySelector("upcoming-item");
+        const itemMovie = document.querySelectorAll(".item-component");
+        itemMovie.forEach(item => {
+            item.addEventListener("click", event => {
+                this.style.display = "none";
+                carouselItem.style.display = "none";
+                nowItem.style.display = "none";
+                upcomingItem.style.display = "none";
+                detailItem.style.display = "block";
+                
+                const result = Detail.getDetail(event.currentTarget.id);
+                result.then(item => {
+                    detailItem.movie = item;
+                });
+            });
+        });    
         
     }
 
