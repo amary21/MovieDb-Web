@@ -18,7 +18,7 @@
     border-radius: 100%;
 }
 
-.carousel-item > .slide-item{
+.carousel-item .slide-item{
     flex-direction: column;
     padding: 24px 16px;
     position: absolute;
