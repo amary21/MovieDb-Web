@@ -1,4 +1,5 @@
 import baseUrl from '../data/baseurl.js';
+import Detail from '../data/detail-data.js';
 
 class NowplayingItem extends HTMLElement{
 
@@ -113,7 +114,25 @@ class NowplayingItem extends HTMLElement{
                 }
 
                 this.appendChild(list);
-            }    
+            }
+
+            const listPopularElement = document.querySelector("#popularSlide");
+            const upcomingItem = document.querySelector("upcoming-item");
+            const detailItem = document.querySelector("detail-item");
+            const itemMovie = document.querySelectorAll(".item-component");
+            itemMovie.forEach(item => {
+                item.addEventListener("click", event => {
+                    this.style.display = "none";
+                    listPopularElement.style.display = "none";
+                    upcomingItem.style.display = "none";
+                    detailItem.style.display = "block";
+                    
+                    const result = Detail.getDetail(event.currentTarget.id);
+                    result.then(item => {
+                        detailItem.movie = item;
+                    });
+                });
+            });   
         
     }
 

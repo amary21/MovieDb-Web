@@ -1,5 +1,7 @@
 import '../component/detail-item.js';
 import '../component/nowplaying-item.js';
+import '../component/upcoming-item.js';
+import '../component/search-item.js';
 import baseUrl from '../data/baseurl.js';
 import Search from '../data/search-data.js';
 import Popular from '../data/popular-data.js';
@@ -8,13 +10,11 @@ import Movie from '../data/movie-data.js';
 
 function main() {
     const listPopularElement = document.querySelector("#popularSlide");
-    const listNowElement = document.querySelector("#nowplayingBar");
-    const listUpcomingElement = document.querySelector("#upcomingBar");
-    const searchElement = document.querySelector("#searchElement");
-    // const detailElement = document.querySelector("#detailElement");
     
     const nowItem = document.querySelector("nowplaying-item");
+    const upcomingItem = document.querySelector("upcoming-item");
     const detailItem = document.querySelector("detail-item");
+    const searchItem = document.querySelector("search-item");
 
     const renderPopular = (results) => {
         if (listPopularElement != null){
@@ -82,55 +82,11 @@ function main() {
 
     };
 
-    const renderMovie = (results, parentElement, title) => {
-        if (parentElement != null){
-            parentElement.classList.add('item-bar');
-            parentElement.innerHTML += `
-                <div class="title-item">
-                    <p>${title}</p>
-                </div>`;
-
-            const list = document.createElement("div");
-            list.classList.add('row');
-            for(let i = 0;i < results.length;i++){
-                let imageHolder = "";
-                if(i >= 6){
-                    break;
-                }else {
-                    if (results[i].poster_path != null){
-                        imageHolder = baseUrl.url_image + results[i].poster_path;
-                    }else{
-                        imageHolder = baseUrl.url_dummy;
-                    }
-
-                    list.innerHTML += `
-                    <div class="item-movie col-lg-2 col-md-4 col-sm-6">
-                        <a href="#" class="button">
-                            <div class="item-component" id="${results[i].id}">
-                                <img src="${imageHolder}" class="d-block w-100 img-fluid" alt="poster">
-                                <h5>${results[i].title}</h5>
-                            </div>
-                        </a>
-                    </div>`;
-                }
-
-                parentElement.appendChild(list);
-            }
-
-            const itemMovie = document.querySelectorAll(".item-component");
-            itemMovie.forEach(item => {
-                item.addEventListener("click", event => {
-                    getDetailData(event.currentTarget.id);
-                });
-            });
-        }
-    };
-
     const renderDetail = (results) =>{
         listPopularElement.style.display = "none";
-        listNowElement.style.display = "none";
-        listUpcomingElement.style.display = "none";
-        searchElement.style.display = "none";
+        nowItem.style.display = "none";
+        upcomingItem.style.display = "none";
+        searchItem.style.display = "none";
 
         detailItem.style.display = "block";
         detailItem.movie = results;
@@ -149,10 +105,14 @@ function main() {
         }
     };
 
-    const getMovieData = async (query, element, title) => {
+    const getMovieData = async (query) => {
         try{
             const result = await Movie.getMovie(query);
-            nowItem.movie = result;
+            if(query == "now_playing"){    
+                nowItem.movie = result;   
+            }else{
+                upcomingItem.movie = result;
+            }
         } catch (message) {
             showResponseMessage(message);
         }
@@ -170,7 +130,7 @@ function main() {
     const onButtonSearchClicked = async (query) => {
         try{
             const result = await Search.getSearch(query);
-            renderMovie(result, searchElement, `Search ${query}`);
+            searchItem.movie = result;
         } catch (message) {
             showResponseMessage(message);
         }
@@ -182,11 +142,11 @@ function main() {
 
         btnSearch.addEventListener("click", function (){
             listPopularElement.style.display = "none";
-            listNowElement.style.display = "none";
-            listUpcomingElement.style.display = "none";
-            searchElement.style.display = "block";
-            // detailElement.style.display = "none";
-            searchElement.innerHTML ="";
+            nowItem.style.display = "none";
+            upcomingItem.style.display = "none";
+            searchItem.style.display = "block";
+            detailItem.style.display = "none";
+            searchItem.innerHTML ="";
 
             if (inputSearch.value != ""){
                 onButtonSearchClicked(inputSearch.value);
@@ -198,7 +158,10 @@ function main() {
 
         getPopularData();
         getMovieData('now_playing');
-        // getMovieData('upcoming', listUpcomingElement, 'Upcoming');
+        getMovieData('upcoming');
+        // detailClick();
+        const itemMovie = document.querySelectorAll(".item-component");
+        console.log(itemMovie);
     });
     
 }
