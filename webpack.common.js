@@ -24,9 +24,6 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Movie Cat",
-            hash : true,
-            alwaysWriteToDisk: true,
             template: "./src/index.html",
             filename: "index.html"
         })

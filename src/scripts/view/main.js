@@ -1,3 +1,5 @@
+import '../component/detail-item.js';
+import '../component/nowplaying-item.js';
 import baseUrl from '../data/baseurl.js';
 import Search from '../data/search-data.js';
 import Popular from '../data/popular-data.js';
@@ -9,7 +11,10 @@ function main() {
     const listNowElement = document.querySelector("#nowplayingBar");
     const listUpcomingElement = document.querySelector("#upcomingBar");
     const searchElement = document.querySelector("#searchElement");
-    const detailElement = document.querySelector("#detailElement");
+    // const detailElement = document.querySelector("#detailElement");
+    
+    const nowItem = document.querySelector("nowplaying-item");
+    const detailItem = document.querySelector("detail-item");
 
     const renderPopular = (results) => {
         if (listPopularElement != null){
@@ -122,68 +127,13 @@ function main() {
     };
 
     const renderDetail = (results) =>{
-        detailElement.innerHTML = "";
-        console.log(results.id);
         listPopularElement.style.display = "none";
         listNowElement.style.display = "none";
         listUpcomingElement.style.display = "none";
         searchElement.style.display = "none";
-        detailElement.style.display = "block";
 
-        let nGenres = [];
-        let nCompanies = [];
-        let nCountries = [];
-
-        results.genres.forEach(genre=>{
-            nGenres.push(` ${genre.name}`);
-        });
-
-        results.production_companies.forEach(companie =>{
-            nCompanies.push(` ${companie.name}`);
-        });
-
-        results.production_countries.forEach(country=>{
-            nCountries.push(` ${country.name}`);
-        });
-
-        detailElement.innerHTML += `
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="item-component">
-                        <img src="${baseUrl.url_image}${results.poster_path}" class="d-block w-100 img-fluid" alt="poster" >
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="thumbnail card">
-                        <div class="card-body">
-                            <h2>${results.title}</h2>
-                            <p><b>Genre</b></p>
-                            <p class="item-body">${nGenres}</p>
-                            <p><b>Original Title</b></p>
-                            <p class="item-body">${results.original_title}</p>
-                            <p><b>Popularity</b></p>
-                            <p class="item-body">${results.popularity}</p>
-                            <p><b>Production Companies</b></p>
-                            <p class="item-body">${nCompanies}</p>
-                            <p><b>Production Countries</b></p>
-                            <p class="item-body">${nCountries}</p>
-                            <p><b>Release Date</b></p>
-                            <p class="item-body">${results.release_date}</p>
-                            <p><b>Rate</b></p>
-                            <p class="item-body">${results.vote_average}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="item-overview col-sm-12">
-                    <div class="thumbnail card">
-                        <div class="card-body">
-                            <p><b>Overview</b></p>
-                            <p class="item-body">${results.overview}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+        detailItem.style.display = "block";
+        detailItem.movie = results;
     }
 
     const showResponseMessage = (message = "Check your internet connection") => {
@@ -202,7 +152,7 @@ function main() {
     const getMovieData = async (query, element, title) => {
         try{
             const result = await Movie.getMovie(query);
-            renderMovie(result, element, title);
+            nowItem.movie = result;
         } catch (message) {
             showResponseMessage(message);
         }
@@ -235,7 +185,7 @@ function main() {
             listNowElement.style.display = "none";
             listUpcomingElement.style.display = "none";
             searchElement.style.display = "block";
-            detailElement.style.display = "none";
+            // detailElement.style.display = "none";
             searchElement.innerHTML ="";
 
             if (inputSearch.value != ""){
@@ -247,8 +197,8 @@ function main() {
         });
 
         getPopularData();
-        getMovieData('now_playing', listNowElement, 'Now Playing');
-        getMovieData('upcoming', listUpcomingElement, 'Upcoming');
+        getMovieData('now_playing');
+        // getMovieData('upcoming', listUpcomingElement, 'Upcoming');
     });
     
 }
