@@ -1,59 +1,15 @@
+import baseUrl from '../data/baseurl.js';
+import Search from '../data/search-data.js';
+import Popular from '../data/popular-data.js';
+import Detail from '../data/detail-data.js';
+import Movie from '../data/movie-data.js';
+
 function main() {
     const listPopularElement = document.querySelector("#popularSlide");
     const listNowElement = document.querySelector("#nowplayingBar");
     const listUpcomingElement = document.querySelector("#upcomingBar");
     const searchElement = document.querySelector("#searchElement");
     const detailElement = document.querySelector("#detailElement");
-
-    const baseUrl = "https://api.themoviedb.org/3";
-    const baseUrlImage = "https://image.tmdb.org/t/p/original";
-    const API_KEY = "ce3747f9814de0e3fc3292c9ef36fcdb";
-    const imgDummy = "https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png";
-
-    const getPopular = async () => {
-        try{
-            const url = ''.concat(baseUrl, `/movie/popular?`, `api_key=${API_KEY}`);
-            const response = await fetch(`${url}`);
-            const responseJson = await response.json();
-            if(responseJson.error){
-                showResponseMessage(responseJson.message);
-            }else{
-                renderPopular(responseJson.results);
-            }
-        } catch(error){
-            showResponseMessage(error);
-        }
-    };
-
-    const getMovie = async (query, elementItem, title) => {
-        try{
-            const url = ''.concat(baseUrl, `${query}`, `api_key=${API_KEY}`);
-            const response = await fetch(`${url}`);
-            const responseJson = await response.json();
-            if(responseJson.error){
-                showResponseMessage(responseJson.message);
-            }else{
-                renderMovie(responseJson.results, elementItem, title);
-            }
-        } catch(error){
-            showResponseMessage(error);
-        }
-    };
-
-    const getDetail = async(idMovie) =>{
-        try{
-            const url = ''.concat(baseUrl, `/movie/${idMovie}?`, `api_key=${API_KEY}`);
-            const response = await fetch(`${url}`);
-            const responseJson = await response.json();
-            if(responseJson.error){
-                showResponseMessage(responseJson.message);
-            }else{
-                renderDetail(responseJson);
-            }
-        } catch(error){
-            showResponseMessage(error);
-        }
-    }
 
     const renderPopular = (results) => {
         if (listPopularElement != null){
@@ -83,7 +39,7 @@ function main() {
 
                     item.innerHTML += `
                         <a href="#" class="button slide-component" id=${results[i].id}>
-                            <img src="${baseUrlImage}${results[i].backdrop_path}" class="d-block w-100" alt="cover">
+                            <img src="${baseUrl.url_image}${results[i].backdrop_path}" class="d-block w-100" alt="cover">
                             <div class="slide-item">
                                 <h4 class="slide-title-item">${results[i].title}</h4>
                                 <div class="slide-des-item">
@@ -114,8 +70,7 @@ function main() {
             const itemMovie = document.querySelectorAll(".slide-component");
             itemMovie.forEach(item => {
                 item.addEventListener("click", event => {
-                    console.log(event.currentTarget.id);
-                    getDetail(event.currentTarget.id);
+                    getDetailData(event.currentTarget.id);
                 });
             });
         }
@@ -138,9 +93,9 @@ function main() {
                     break;
                 }else {
                     if (results[i].poster_path != null){
-                        imageHolder = baseUrlImage + results[i].poster_path;
+                        imageHolder = baseUrl.url_image + results[i].poster_path;
                     }else{
-                        imageHolder = imgDummy;
+                        imageHolder = baseUrl.url_dummy;
                     }
 
                     list.innerHTML += `
@@ -160,7 +115,7 @@ function main() {
             const itemMovie = document.querySelectorAll(".item-component");
             itemMovie.forEach(item => {
                 item.addEventListener("click", event => {
-                    getDetail(event.currentTarget.id);
+                    getDetailData(event.currentTarget.id);
                 });
             });
         }
@@ -195,7 +150,7 @@ function main() {
             <div class="row">
                 <div class="col-sm-6">
                     <div class="item-component">
-                        <img src="${baseUrlImage}${results.poster_path}" class="d-block w-100 img-fluid" alt="poster" >
+                        <img src="${baseUrl.url_image}${results.poster_path}" class="d-block w-100 img-fluid" alt="poster" >
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -235,13 +190,47 @@ function main() {
         alert(message);
     };
 
+    const getPopularData = async () => {
+        try{
+            const result = await Popular.getPopular();
+            renderPopular(result);
+        } catch (message) {
+            showResponseMessage(message);
+        }
+    };
+
+    const getMovieData = async (query, element, title) => {
+        try{
+            const result = await Movie.getMovie(query);
+            renderMovie(result, element, title);
+        } catch (message) {
+            showResponseMessage(message);
+        }
+    };
+
+    const getDetailData = async (idMovie) => {
+        try{
+            const result = await Detail.getDetail(idMovie);
+            renderDetail(result);
+        } catch (message) {
+            showResponseMessage(message);
+        }
+    }
+
+    const onButtonSearchClicked = async (query) => {
+        try{
+            const result = await Search.getSearch(query);
+            renderMovie(result, searchElement, `Search ${query}`);
+        } catch (message) {
+            showResponseMessage(message);
+        }
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
         const inputSearch = document.querySelector("#inputSearch");
         const btnSearch = document.querySelector("#searchButtonElement");
 
         btnSearch.addEventListener("click", function (){
-            const input = inputSearch.value;
-
             listPopularElement.style.display = "none";
             listNowElement.style.display = "none";
             listUpcomingElement.style.display = "none";
@@ -249,18 +238,19 @@ function main() {
             detailElement.style.display = "none";
             searchElement.innerHTML ="";
 
-            if (input != ""){
-                getMovie(`/search/movie?query=${input}&`, searchElement, `Search ${input}`);
+            if (inputSearch.value != ""){
+                onButtonSearchClicked(inputSearch.value);
             }else{
-                getMovie(`/search/movie?query=%20&`, searchElement, `Search ${input}`);    
+                onButtonSearchClicked('%20');
             }
             
         });
 
-        getPopular();
-        getMovie('/movie/now_playing?', listNowElement, 'Now Playing');
-        getMovie('/movie/upcoming?', listUpcomingElement, 'Upcoming');
+        getPopularData();
+        getMovieData('now_playing', listNowElement, 'Now Playing');
+        getMovieData('upcoming', listUpcomingElement, 'Upcoming');
     });
+    
 }
 
 export default main;
