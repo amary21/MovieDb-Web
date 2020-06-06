@@ -1,0 +1,13 @@
+const errorValue = 
+    `<style>
+        .placeholder {
+            font-weight: lighter;
+            color: rgba(0,0,0,0.5);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>`;
+
+export default errorValue;

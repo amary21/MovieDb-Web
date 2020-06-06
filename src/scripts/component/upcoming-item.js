@@ -1,6 +1,8 @@
 import baseUrl from '../data/baseurl.js';
 import Detail from '../data/detail-data.js';
 import Trailer from '../data/trailer-data.js';
+import movieItem from '../component/styles/movie-item.js';
+import errorValue from '../component/styles/error.js';
 
 class UpcomingItem extends HTMLElement{
 
@@ -12,80 +14,7 @@ class UpcomingItem extends HTMLElement{
     render() {
         this.classList.add('item-bar');
         this.innerHTML +=`
-            <style>
-                * {
-                    padding: 0;
-                    margin: 0;
-                    box-sizing: border-box;
-                }
-                
-                .item-bar{
-                    position: static;
-                    width: 100%;
-                    background: #162447;
-                    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
-                    border-radius: 20px;
-                    flex: none;
-                    order: 1;
-                    align-self: flex-start;
-                    margin-top: 16px;
-                    padding: 16px 16px 0px 16px;
-                }
-                
-                .title-item{
-                    position: static;
-                }
-                
-                .title-item > p{
-                    position: relative;
-                    padding: 8px 16px 8px 16px;
-                    color: #FFFFFF;
-                    background: #E43F5A;
-                    font-family: Roboto;
-                    font-style: normal;
-                    text-align: center;
-                    font-weight: bold;
-                    max-width: 200px;
-                    font-size: 18px;
-                    line-height: 21px;
-                    border-radius: 20px;
-                
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-                
-                .item-movie{
-                    position: static;
-                }
-                
-                .item-movie > a.button{
-                    text-decoration: none;
-                }
-                
-                .item-movie .item-component{
-                    border-radius: 10px;
-                    margin-bottom: 16px;
-                    padding-bottom: 4px;
-                    background: rgba(0, 0, 0, 0.7);
-                }
-                
-                .item-component > img {
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-                    
-                }
-                
-                .item-component > h5{
-                    font-family: Roboto;
-                    text-align: center;
-                    color: #FFFFFF;
-                    padding: 4px 8px 0px 8px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-            </style>
+            <style>${movieItem}</style>
             <div class="title-item">
                 <p>Upcoming</p>
             </div>`;
@@ -144,18 +73,7 @@ class UpcomingItem extends HTMLElement{
     }
 
     renderError(message){
-        this.innerHTML = `
-        <style>
-             .placeholder {
-                   font-weight: lighter;
-                   color: rgba(0,0,0,0.5);
-                   -webkit-user-select: none;
-                   -moz-user-select: none;
-                   -ms-user-select: none;
-                   user-select: none;
-               }
-        </style>`;
-        this.innerHTML += `<h2 class="placeholder">${message}</h2>`;
+        this.innerHTML = `${errorValue}<h2 class="placeholder">${message}</h2>`;
     }
 
 }
