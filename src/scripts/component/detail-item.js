@@ -81,6 +81,21 @@ class DetailItem extends HTMLElement{
                 .item-overview{
                     margin-top: 16px;
                 }
+                .container-video{
+                    position: relative;
+                    width: 100%;
+                    height: 0;
+                    padding-bottom: 56.25%;
+                }
+                .container-video iframe{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                }
             </style>
             <div class="row">
                 <div class="col-sm-6">
@@ -114,6 +129,16 @@ class DetailItem extends HTMLElement{
                         <div class="card-body">
                             <p><b>Overview</b></p>
                             <p class="item-body">${this._movie.overview}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-overview col-sm-12">
+                    <div class="thumbnail card">
+                        <div class="card-body">
+                            <p><b>Trailer</b></p>
+                            <div class="container-video">
+                                <iframe frameborder="0" allowfullscreen src="https://www.youtube.com/embed/vOUVVDWdXbo"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
