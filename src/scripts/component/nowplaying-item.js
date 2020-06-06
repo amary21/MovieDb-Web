@@ -1,5 +1,6 @@
 import baseUrl from '../data/baseurl.js';
 import Detail from '../data/detail-data.js';
+import Trailer from '../data/trailer-data.js';
 
 class NowplayingItem extends HTMLElement{
 
@@ -128,8 +129,14 @@ class NowplayingItem extends HTMLElement{
                     detailItem.style.display = "block";
                     
                     const result = Detail.getDetail(event.currentTarget.id);
+                    const videos = Trailer.getTrailer(event.currentTarget.id);
                     result.then(item => {
-                        detailItem.movie = item;
+                        videos.then(video =>{
+                            detailItem.movie = {
+                                data: item, 
+                                trailer: video
+                            };
+                        });
                     });
                 });
             });   

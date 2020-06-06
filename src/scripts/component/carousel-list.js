@@ -1,5 +1,6 @@
 import baseUrl from '../data/baseurl.js';
 import Detail from '../data/detail-data.js';
+import Trailer from '../data/trailer-data.js';
 
 class CarouselList extends HTMLElement {
     
@@ -9,7 +10,6 @@ class CarouselList extends HTMLElement {
     }
 
     render() {
-        console.log(this._movie)
         this.classList.add('carousel', 'slide', 'carousel-fade');
         this.setAttribute("data-ride","carousel");
         this.setAttribute("id", "popularSlide");
@@ -171,9 +171,15 @@ class CarouselList extends HTMLElement {
                 detailItem.style.display = "block";
                 
                 const result = Detail.getDetail(event.currentTarget.id);
-                result.then(item => {
-                    detailItem.movie = item;
-                });
+                const videos = Trailer.getTrailer(event.currentTarget.id);
+                    result.then(item => {
+                        videos.then(video =>{
+                            detailItem.movie = {
+                                data: item, 
+                                trailer: video
+                            };
+                        });
+                    });
             });
         });  
         

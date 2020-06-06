@@ -3,10 +3,8 @@ import '../component/nowplaying-item.js';
 import '../component/upcoming-item.js';
 import '../component/search-item.js';
 import '../component/carousel-list.js';
-import baseUrl from '../data/baseurl.js';
 import Search from '../data/search-data.js';
 import Popular from '../data/popular-data.js';
-import Detail from '../data/detail-data.js';
 import Movie from '../data/movie-data.js';
 
 function main() {

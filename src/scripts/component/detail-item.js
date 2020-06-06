@@ -3,8 +3,9 @@ import baseUrl from '../data/baseurl.js';
 class DetailItem extends HTMLElement{
 
     set movie(movie){
-        this._movie = movie
-        this.render()
+        this._movie = movie.data;
+        this._video = movie.trailer[0].key;
+        this.render();
     }
 
     render() {
@@ -137,7 +138,7 @@ class DetailItem extends HTMLElement{
                         <div class="card-body">
                             <p><b>Trailer</b></p>
                             <div class="container-video">
-                                <iframe frameborder="0" allowfullscreen src="https://www.youtube.com/embed/vOUVVDWdXbo"></iframe>
+                                <iframe frameborder="0" allowfullscreen src="${baseUrl.url_video}${this._video}"></iframe>
                             </div>
                         </div>
                     </div>
