@@ -1,8 +1,8 @@
 import baseUrl from '../data/baseurl.js';
 import Detail from '../data/detail-data.js';
 import Trailer from '../data/trailer-data.js';
-import movieItem from '../component/styles/movie-item.js';
-import errorValue from '../component/styles/error.js';
+import movieItem from './_styles/movie-item.js';
+import errorValue from './_styles/error.js';
 
 class NowplayingItem extends HTMLElement{
 

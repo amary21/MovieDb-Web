@@ -1,6 +1,6 @@
 import baseUrl from '../data/baseurl.js';
-import detail from '../component/styles/detail.js';
-import errorValue from '../component/styles/error.js';
+import detail from './_styles/detail.js';
+import errorValue from './_styles/error.js';
 
 class DetailItem extends HTMLElement{
 

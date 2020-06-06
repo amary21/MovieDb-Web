@@ -1,8 +1,8 @@
 import baseUrl from '../data/baseurl.js';
 import Detail from '../data/detail-data.js';
 import Trailer from '../data/trailer-data.js';
-import carousel from '../component/styles/carousel.js';
-import errorValue from '../component/styles/error.js';
+import carousel from './_styles/carousel.js';
+import errorValue from './_styles/error.js';
 
 class CarouselList extends HTMLElement {
     
