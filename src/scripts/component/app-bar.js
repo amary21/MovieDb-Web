@@ -1,4 +1,4 @@
-import appBar from '../component/styles/app-bar.js';
+import appBar from './_styles/app-bar.js';
 
 class AppBar extends HTMLElement {
 
